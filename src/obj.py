@@ -6,53 +6,40 @@ import requests
 class AbstractAPI(ABC):
 
     @abstractmethod
-    def get_data(self):
+    def get_data(self, keyword):
         pass
 
 
-class ServiceAPI(AbstractAPI):
-    def __init__(self, url):
-        self.url = url
-
-    def get_data(self):
-        return requests.get(self.url).json()
-
-    def __repr__(self):
-        return f'Получены данные {self.url}'
-
-
-class Vacancy(ServiceAPI):
-    def __init__(self, url):
-        super().__init__(url)
-        self.data = self.get_data()
-
-    def is_specified(self):
-        if self.data['salary'] is None:
-            return False
-
-    def compare(self, other):
-        if not self.is_specified():
-            self.data['salary'] = 'Зарплата не указана'
-        return self.data['salary'] > other.data['salary']
-
-
-class HH(ServiceAPI):
+class HH(AbstractAPI, ABC):
     """
     Класс для работы с API HeadHunter
-    Класс Parser является родительским классом, который вам необходимо реализовать
     """
 
-    def __init__(self, file_worker):
+    def __init__(self):
         self.url = 'https://api.hh.ru/vacancies'
         self.headers = {'User-Agent': 'HH-User-Agent'}
-        self.params = {'text': '', 'page': 0, 'per_page': 100}
+        self.params = {'text': '', 'page': 0, 'per_page': 5}
         self.vacancies = []
-        super().__init__(file_worker)
 
-    def load_vacancies(self, keyword):
+    def get_data(self, keyword):
         self.params['text'] = keyword
-        while self.params.get('page') != 20:
+        while self.params.get('page') != 5:
             response = requests.get(self.url, headers=self.headers, params=self.params)
             vacancies = response.json()['items']
             self.vacancies.extend(vacancies)
             self.params['page'] += 1
+        # print(response.status_code)
+
+    def is_specified(self):
+        if 'salary' not in self.vacancies:
+            return False
+
+    def compare(self, other):
+        if not self.is_specified():
+            self.vacancies['salary'] = 'Зарплата не указана'
+        return self.vacancies['salary'] > other.vacancies['salary']
+
+
+# g1 = HH()
+# v1 = g1.get_data('Разработчик')
+# print(g1.vacancies)
