@@ -28,7 +28,17 @@ class HH(AbstractAPI, ABC):
             vacancies = response.json()['items']
             self.vacancies.extend(vacancies)
             self.params['page'] += 1
-        # print(response.status_code)
+        return self.vacancies
+
+
+class Vacancy:
+    def __init__(self, name, url, description, requirements, salary):
+        self.name = name
+        self.url = url
+        self.description = description
+        self.requirements = requirements
+        self.salary = salary
+
 
     def is_specified(self):
         if 'salary' not in self.vacancies:
@@ -38,8 +48,3 @@ class HH(AbstractAPI, ABC):
         if not self.is_specified():
             self.vacancies['salary'] = 'Зарплата не указана'
         return self.vacancies['salary'] > other.vacancies['salary']
-
-
-# g1 = HH()
-# v1 = g1.get_data('Разработчик')
-# print(g1.vacancies)
