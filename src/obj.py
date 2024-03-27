@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 import requests
 import json
@@ -18,11 +19,12 @@ class HH(AbstractAPI, ABC):
     Класс для работы с API HeadHunter
     """
 
-    def __init__(self):
+    def __init__(self, area=113) -> None:
         self.url = 'https://api.hh.ru/vacancies'
         self.headers = {'User-Agent': 'HH-User-Agent'}
         self.params = {'text': '', 'page': 0, 'per_page': 5}
         self.vacancies = []
+        self.area = area
 
     def get_data(self, keyword):
         self.params['text'] = keyword
@@ -132,11 +134,11 @@ class JSONFile(AbstractFile, ABC):
             json.dump(vacancy.__dict__, file)
             file.write('\n')
 
-    def get_data_from_dict(self, filter_words):
+    def get_data_from_dict(self):
         with open(self.filename, 'r', encoding='UTF-8') as file:
             vacancies = [json.loads(line) for line in file.readlines()]
         return vacancies
 
     def del_data_dict(self):
-        open(self.filename, 'w').close()
+        os.remove(self.filename)
 
