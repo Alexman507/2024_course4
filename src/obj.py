@@ -139,3 +139,4 @@ class JSONFile(AbstractFile, ABC):
 
     def del_data_dict(self):
         open(self.filename, 'w').close()
+
