@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
-
 import requests
+import json
 
 
 class AbstractAPI(ABC):
+    """
+    Абстрактный класс для работы с API
+    """
 
     @abstractmethod
     def get_data(self, keyword):
@@ -33,6 +36,7 @@ class HH(AbstractAPI, ABC):
 
 class Vacancy:
     """Класс для ваканский, содержит название, работодателя, ссылку на вакансию, описание, требования и зарплату"""
+
     def __init__(self, name: str, employer: str, url: str, description: str, requirements: str, salary):
         self.name = name
         self.employer = employer
@@ -97,3 +101,41 @@ class Vacancy:
             self.salary_min = None
             self.salary_max = None
             print(f"Ошибка при парсинге зарплаты: {salary}")
+
+
+class AbstractFile(ABC):
+    """
+        Абстрактный класс для работы с файлами
+    """
+
+    @abstractmethod
+    def data_to_dict(self, vacancy: Vacancy):  # Запись
+        pass
+
+    @abstractmethod
+    def get_data(self, keys):  # Чтение
+        pass
+
+    @abstractmethod
+    def del_data_dict(self):  # Удаление
+        pass
+
+
+class JSONFile(AbstractFile, ABC):
+    """Класс для работы с файлом JSON (Чтение, запись, удаление)"""
+
+    def __init__(self, filename: str):
+        self.filename = filename
+
+    def add_data_to_dict(self, vacancy: Vacancy):
+        with open(self.filename, 'a', encoding='UTF-8') as file:
+            json.dump(vacancy.__dict__, file)
+            file.write('\n')
+
+    def get_data_from_dict(self, filter_words):
+        with open(self.filename, 'r', encoding='UTF-8') as file:
+            vacancies = [json.loads(line) for line in file.readlines()]
+        return vacancies
+
+    def del_data_dict(self):
+        open(self.filename, 'w').close()
