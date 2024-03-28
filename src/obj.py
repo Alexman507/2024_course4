@@ -133,7 +133,7 @@ class JSONFile(AbstractFile, ABC):
 
     def add_data_to_dict(self, vacancy: Vacancy):
         with open(self.filename, 'a', encoding='UTF-8') as file:
-            json.dump(vacancy.__dict__, file, ensure_ascii=False, indent=4)
+            json.dump(vacancy.__dict__, file, ensure_ascii=False)
             file.write('\n')
 
     def get_data(self):

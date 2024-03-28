@@ -13,8 +13,8 @@ class TestHH:
     def test_get_data(self, test_obj):
         test_code = test_obj.get_data(keyword='Разработчик')
         # print(test_obj.vacancies)
-        assert type(test_code.vacancies) == list
-        assert isinstance(test_code.vacancies, list)
+        assert type(test_obj.vacancies) == list
+        assert isinstance(test_obj.vacancies, list)
 
     @pytest.fixture
     def formatter_instance(self, test_obj):
@@ -42,7 +42,7 @@ def json_file():
 
 
 def test_add_data_to_dict(json_file):
-    vacancy = obj.Vacancy("Test Title", "test_url", "Test Employer",
+    vacancy = obj.Vacancy("Test", "test_url", "Test Employer",
                           "Test Requirement", "Test Description",
                           "1000-2000")
     json_file.add_data_to_dict(vacancy)
@@ -51,13 +51,13 @@ def test_add_data_to_dict(json_file):
         vacancies = [json.loads(line) for line in test_file.readlines()]
 
     assert len(vacancies) == 1
-    assert vacancies[0]['title'] == 'Test Title'
+    assert vacancies[0]['name'] == 'Test'
 
 
 def test_get_data_from_dict(json_file):
     vacancies = json_file.get_data()
     assert len(vacancies) == 1
-    assert vacancies[0]['title'] == 'Test Title'
+    assert vacancies[0]['name'] == 'Test'
 
 
 def test_del_data_dict(json_file):
@@ -83,7 +83,7 @@ def test_vacancy():
                 description='Поддержка микросервисов. Разработка интеграций.'),
         obj.Vacancy(name="Python Developer", url="Google", employer="Test Employer",
                 requirements="Python", description="Write tests",
-                salary="from120000 руб"),
+                salary={"to": 120000}),
 
     ]
     return vacancies
