@@ -27,7 +27,9 @@ class HH(AbstractAPI, ABC):
         self.area = area
 
     def get_data(self, keyword):
+        print(f"Поиск вакансий по ключевому слову, пожалуйста подождите...")
         self.params['text'] = keyword
+        self.params['area'] = self.area
         while self.params.get('page') != 5:
             response = requests.get(self.url, headers=self.headers, params=self.params)
             vacancies = response.json()['items']
@@ -102,9 +104,6 @@ class Vacancy:
         else:
             self.salary_min = None
             self.salary_max = None
-            print(f"Ошибка при парсинге зарплаты: {salary}")
-
-
 
 
 class AbstractFile(ABC):
@@ -113,11 +112,11 @@ class AbstractFile(ABC):
     """
 
     @abstractmethod
-    def data_to_dict(self, vacancy: Vacancy):  # Запись
+    def add_data_to_dict(self, vacancy: Vacancy):  # Запись
         pass
 
     @abstractmethod
-    def get_data(self, keys):  # Чтение
+    def get_data(self):  # Чтение
         pass
 
     @abstractmethod
@@ -136,7 +135,7 @@ class JSONFile(AbstractFile, ABC):
             json.dump(vacancy.__dict__, file)
             file.write('\n')
 
-    def get_data_from_dict(self):
+    def get_data(self):
         with open(self.filename, 'r', encoding='UTF-8') as file:
             vacancies = [json.loads(line) for line in file.readlines()]
         return vacancies

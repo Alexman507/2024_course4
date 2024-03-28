@@ -7,9 +7,12 @@ def filter_vacancies(vacancies_list, filter_words):
         if vacancy.description:
             exclude = False
             for word in filter_words:
-                if word.lower() in vacancy.title.lower() or word.lower() in vacancy.description.lower():
-                    exclude = True
-                    break
+                try:
+                    if word.lower() in vacancy.title.lower() or word.lower() in vacancy.description.lower():
+                        exclude = True
+                        break
+                except AttributeError:
+                    continue
             if not exclude:
                 filtered_vacancies.append(vacancy)
     return filtered_vacancies
@@ -51,12 +54,12 @@ def format_vacancies_to_list(keyword):
 def user_interaction():
     hh_api = HH(113)
 
-    json_file = JSONFile('/data/vacancies.json')
+    json_file = JSONFile('data/vacancies.json')
     platforms = ["HeadHunter"]
 
     search_query = input("Введите поисковый запрос: ")
     vacancies_list = format_vacancies_to_list(search_query)
-    filter_words = str(input("Введите ключевые слова для фильтрации вакансий: ").split())
+    filter_words = str(input("Введите ключевые слова для фильтрации вакансий по описанию: ").split())
     filtered_vacancies = filter_vacancies(vacancies_list, filter_words)
 
     if not filtered_vacancies:
@@ -68,8 +71,8 @@ def user_interaction():
         print(f"{idx}. {vacancy}")
         json_file.add_data_to_dict(vacancy)
 
-    salary_range = input("Введите диапазон зарплат, например: 100000 - 150000: ")
-    ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
+    # salary_range = input("Введите диапазон зарплат, например: 100000 - 150000: ")
+    # ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
 
     top_n = int(input("Введите количество вакансий для вывода в топ N: "))
     vacancies_with_salary = [vacancy for vacancy in filtered_vacancies if vacancy.salary_min is not None
