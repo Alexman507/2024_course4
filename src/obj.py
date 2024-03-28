@@ -99,10 +99,10 @@ class Vacancy:
         elif isinstance(salary, int):
             self.salary_min = salary
             self.salary_max = salary
-        elif isinstance(salary, dict or list):
+        elif isinstance(salary, dict):
             self.salary_min = salary.get('from')
             self.salary_max = salary.get('to')
-        elif not salary:
+        else:
             self.salary_min = None
             self.salary_max = None
 
