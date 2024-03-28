@@ -105,6 +105,8 @@ class Vacancy:
             print(f"Ошибка при парсинге зарплаты: {salary}")
 
 
+
+
 class AbstractFile(ABC):
     """
         Абстрактный класс для работы с файлами
@@ -141,4 +143,3 @@ class JSONFile(AbstractFile, ABC):
 
     def del_data_dict(self):
         os.remove(self.filename)
-
