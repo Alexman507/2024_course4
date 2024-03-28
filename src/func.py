@@ -7,13 +7,14 @@ def filter_vacancies(vacancies_list, filter_words):
     for vacancy in vacancies_list:
         if vacancy.description:
             exclude = False
-            for word in filter_words:
-                try:
+            try:
+                for word in filter_words:
                     if word.lower() in vacancy.title.lower() or word.lower() in vacancy.description.lower():
                         exclude = True
                         break
-                except AttributeError:
-                    continue
+            except AttributeError:
+                filtered_vacancies.append(vacancies_list)
+                continue
             if not exclude:
                 filtered_vacancies.append(vacancy)
     return filtered_vacancies
