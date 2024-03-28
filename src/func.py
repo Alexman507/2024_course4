@@ -2,6 +2,7 @@ from src.obj import *
 
 
 def filter_vacancies(vacancies_list, filter_words):
+    """Фильтрует вакансии по названию"""
     filtered_vacancies = []
     for vacancy in vacancies_list:
         if vacancy.description:
@@ -19,6 +20,7 @@ def filter_vacancies(vacancies_list, filter_words):
 
 
 def format_vacancies_to_list(keyword):
+    """Форматирует вакансии в список по зарплате, если есть"""
     data = HH().get_data(keyword=keyword)
     vacancies = []
     for vacancy in data:
@@ -52,7 +54,8 @@ def format_vacancies_to_list(keyword):
 
 
 def user_interaction():
-    hh_api = HH(113)
+
+    # hh_api = HH(113)
 
     json_file = JSONFile('data/vacancies.json')
     platforms = ["HeadHunter"]
@@ -81,3 +84,12 @@ def user_interaction():
     print(f"\n Топ-{top_n} вакансий по зарплате: \n")
     for idx, vacancy in enumerate(ranged_vacancies[:top_n], start=1):
         print(f"{idx}. {vacancy}")
+
+    if_cleandata = input("Нужно ли почистить файл vacancies? (y/n): ")
+    if if_cleandata.lower() == 'y':
+        json_file.del_data_dict()
+
+    rerun = input("Нужно ли повторить поиск? (y/n): ")
+    if rerun.lower() == 'y':
+        user_interaction()
+

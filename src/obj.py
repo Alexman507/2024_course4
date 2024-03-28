@@ -55,6 +55,7 @@ class Vacancy:
         return (f"{self.name}\n"
                 f"{self.employer}\n"
                 f"{self.salary_min}\n"
+                f"{self.salary_max}\n"
                 f"{self.description}\n"
                 f"{self.url}")
 
@@ -132,7 +133,7 @@ class JSONFile(AbstractFile, ABC):
 
     def add_data_to_dict(self, vacancy: Vacancy):
         with open(self.filename, 'a', encoding='UTF-8') as file:
-            json.dump(vacancy.__dict__, file)
+            json.dump(vacancy.__dict__, file, ensure_ascii=False, indent=4)
             file.write('\n')
 
     def get_data(self):
@@ -141,4 +142,4 @@ class JSONFile(AbstractFile, ABC):
         return vacancies
 
     def del_data_dict(self):
-        os.remove(self.filename)
+        open(self.filename, 'w').close()
