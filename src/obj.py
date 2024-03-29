@@ -1,7 +1,7 @@
-import os
-from abc import ABC, abstractmethod
-import requests
 import json
+from abc import ABC, abstractmethod
+
+import requests
 
 
 class AbstractAPI(ABC):

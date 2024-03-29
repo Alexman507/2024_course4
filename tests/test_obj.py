@@ -71,19 +71,20 @@ def test_del_data_dict(json_file):
 
     os.remove('tests/test_data/test_vacancies.json')
 
+
 @pytest.fixture
 def test_vacancy():
     vacancies = [
         obj.Vacancy(name="Test Title", url="test_url", employer="Test Employer",
-                requirements="Test Requirement", description="Test Description",
-                salary=""),
+                    requirements="Test Requirement", description="Test Description",
+                    salary=""),
         obj.Vacancy(name="Junior программист Python", employer='ПерилаГлавСнаб',
-                salary="60 000-80 000 руб.", url='https://hh.ru/vacancy/93804724',
-                requirements='Уверенное знание Python. Уверенное знание SQL(PSQL, MSSQL).',
-                description='Поддержка микросервисов. Разработка интеграций.'),
+                    salary="60 000-80 000 руб.", url='https://hh.ru/vacancy/93804724',
+                    requirements='Уверенное знание Python. Уверенное знание SQL(PSQL, MSSQL).',
+                    description='Поддержка микросервисов. Разработка интеграций.'),
         obj.Vacancy(name="Python Developer", url="Google", employer="Test Employer",
-                requirements="Python", description="Write tests",
-                salary={"to": 120000}),
+                    requirements="Python", description="Write tests",
+                    salary={"to": 120000}),
 
     ]
     return vacancies
